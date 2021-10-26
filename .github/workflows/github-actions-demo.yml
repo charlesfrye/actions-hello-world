@@ -15,10 +15,12 @@ jobs:
         with:
           repository: wandb/gitbook
           path: documentation
+          ref: en
       - run: echo "🖥️ the workflow is now ready to test your code on the runner."
-      - name: list files in the repository
-        run: |
-          ls ${{ github.workspace }}
-          ls -a ${{ github.workspace }}
-          ls documentation
-      - run: echo "🍏 this job's status is ${{ job.status }}."
+      - name: setup python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - run: python -c 'print("hello world!")'
+      - name: exit
+        run: echo "🍏 this job's status is ${{ job.status }}."
