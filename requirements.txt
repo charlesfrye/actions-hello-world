@@ -1,0 +1,6 @@
+wandb
+astor
+dataclasses
+
+# for integrations
+tensorflow
