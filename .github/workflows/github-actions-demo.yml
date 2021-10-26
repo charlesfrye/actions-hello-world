@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-        run: python -m pip install -r requirements.txt
+      - run: python -m pip install -r requirements.txt
       - run: python -c 'print("hello world!")'
       - name: exit
         run: echo "🍏 this job's status is ${{ job.status }}."
