@@ -24,3 +24,5 @@ jobs:
       - name: generate documentation
         working-directory: ./documentation/docugen
         run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
+      - name: display ToC
+        run: cat ./documentation/gitbook/SUMMARY.md
