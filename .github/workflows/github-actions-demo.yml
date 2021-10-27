@@ -33,10 +33,12 @@ jobs:
       - name: commit changes
         working-directory: ./documentation/gitbook
         run: |
+          echo "hello from inside the github action!" >> README.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A .
           # git commit -m "Update to v0.12.5"
+          git commit -m "integration test"
       - name: push
         working-directory: ./documentation/gitbook
         env:
