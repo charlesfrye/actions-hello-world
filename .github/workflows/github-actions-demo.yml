@@ -29,14 +29,9 @@ jobs:
       - name: setup python environment
         working-directory: ./documentation/docugen
         run: python -m pip install -r requirements.txt
-      - run: python -c 'import sys; print(sys.path)'
-      - run: echo 🐍 $PYTHONPATH
-      - name: check for docugen
-        working-directory: ./documentation/docugen
-        run: python -c 'import docugen'
       - name: generate documentation
         working-directory: ./documentation/docugen
-      - run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
+        run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
       - run: cat ./documentation/gitbook/SUMMARY.MD
       - name: exit
         run: echo "🍏 this job's status is ${{ job.status }}."
