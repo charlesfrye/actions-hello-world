@@ -1,7 +1,7 @@
-name: GitHub Actions Demo
+name: Generation Documentation
 on: [push]
 jobs:
-  run-python-code:
+  run-documentation-generator:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 the job was automatically triggered by a ${{ github.event_name }} event."
@@ -14,26 +14,24 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: wandb/gitbook
-          path: documentation
+          path: documentation/gitbook
           ref: en
       - name: checkout docugen repo
         uses: actions/checkout@v2
         with:
           repository: wandb/docugen
-          path: documentation
+          path: documentation/docugen
       - run: echo "🖥️ the workflow is now ready to test your code on the runner."
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: setup python environment
-        working-directory: ./documentation/docugen
-        run: python -m pip install -r requirements.txt
-      - name: setup upterm
-        uses: lhotari/action-upterm@v1
+        run: python -m pip install -r ./documentation/docugen/requirements.txt
       - name: generate documentation
         working-directory: ./documentation/docugen
         run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
-      - run: cat ./documentation/gitbook/SUMMARY.MD
+      - run: cat ./documentation/gitbook/SUMMARY.md
+      - run: cat ./documentation/gitbook/
       - name: exit
         run: echo "🍏 this job's status is ${{ job.status }}."
