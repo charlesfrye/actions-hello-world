@@ -22,13 +22,16 @@ jobs:
           repository: wandb/docugen
           path: documentation
       - run: echo "🖥️ the workflow is now ready to test your code on the runner."
-      - name: setup python environment
+      - name: setup python
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - run: cd documentation/docugen
-      - run: python -m pip install -r requirements.txt
-      - run: python generate.py --template_file ../gitbook/_SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
-      - run: cat ../gitbook/SUMMARY.MD
+      - name: setup python environment
+        working-directory: ./documentation/docugen
+        run: python -m pip install -r requirements.txt
+      - name: generate documentation
+        working-directory: ./documentation/docugen
+        run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
+      - run: cat ./documentation/gitbook/SUMMARY.MD
       - name: exit
         run: echo "🍏 this job's status is ${{ job.status }}."
