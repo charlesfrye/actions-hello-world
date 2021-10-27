@@ -4,17 +4,17 @@ jobs:
   run-documentation-generator:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout docugen repo
+        uses: actions/checkout@v2
+        with:
+          repository: wandb/docugen
+          path: documentation/docugen
       - name: checkout gitbook repo
         uses: actions/checkout@v2
         with:
           repository: charlesfrye/gitbook
           path: documentation/gitbook
           ref: en
-      - name: checkout docugen repo
-        uses: actions/checkout@v2
-        with:
-          repository: wandb/docugen
-          path: documentation/docugen
       - name: setup python
         uses: actions/setup-python@v2
         with:
