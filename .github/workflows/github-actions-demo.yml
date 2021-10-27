@@ -1,9 +1,17 @@
 name: Generate Documentation
-on: [push]
+on:
+  create:
 jobs:
-  run-documentation-generator:
+  update-docs:
+    if: ${{ startsWith(github.ref, "refs/tags/v") }}
     runs-on: ubuntu-latest
     steps:
+      - name: get release info
+        id: release
+        run: |
+          echo ::set-output name=NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: checkout docugen repo
         uses: actions/checkout@v2
         with:
@@ -26,18 +34,22 @@ jobs:
         run: python -c 'print("not setting up env")'
       - name: generate documentation
         working-directory: ./documentation/docugen
-        # run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id v0.12.5 --output_dir ../gitbook
-        run: python -c 'print("not running docugen")'
+        env:
+          VERSION: ${{ steps.release.VERSION }}
+        # run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id $VERSION --output_dir ../gitbook
+        run: python -c 'print("$VERSION")'
       - name: display ToC
         run: cat ./documentation/gitbook/SUMMARY.md
       - name: commit changes
         working-directory: ./documentation/gitbook
+        env:
+          VERSION: ${{ steps.release.VERSION }}
         run: |
           echo "hello from inside the github action!" >> app.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A .
-          git commit -m "integration test"
+          git commit -m "update reference docs to $VERSION"
       - name: push
         working-directory: ./documentation/gitbook
         env:
