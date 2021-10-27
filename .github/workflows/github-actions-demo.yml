@@ -38,4 +38,4 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
         run: |
           git remote set-url origin https://charlesfrye:$PERSONAL_ACCESS_TOKEN@github.com/charlesfrye/gitbook.git
-          git push
+          git push -set-upstream origin en
