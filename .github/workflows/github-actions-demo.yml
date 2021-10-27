@@ -9,12 +9,14 @@ jobs:
         with:
           repository: wandb/docugen
           path: documentation/docugen
+          persist-credentials: false
       - name: checkout gitbook repo
         uses: actions/checkout@v2
         with:
           repository: charlesfrye/gitbook
           path: documentation/gitbook
           ref: en
+          persist-credentials: false
       - name: setup python
         uses: actions/setup-python@v2
         with:
@@ -37,10 +39,9 @@ jobs:
           # git commit -m "Update to v0.12.5"
       - name: push
         working-directory: ./documentation/gitbook
-        # env:
-                #  PERSONAL_ACCESS_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
         run: |
-          git push
-                #git remote set-url origin https://charlesfrye:$PERSONAL_ACCESS_TOKEN@github.com/charlesfrye/gitbook.git
-                #git remote get-url origin
-                #git push --set-upstream origin en
+          git remote set-url origin https://charlesfrye:$PERSONAL_ACCESS_TOKEN@github.com/charlesfrye/gitbook.git
+          git remote get-url origin
+          git push --set-upstream origin en
