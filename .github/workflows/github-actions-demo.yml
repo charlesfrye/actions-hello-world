@@ -6,12 +6,6 @@ jobs:
   update-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: get release info
-        id: release
-        run: |
-          echo ::set-output name=NAME::${GITHUB_REF#refs/*/}
-          echo ::set-output name=BRANCH::${GITHUB_REF#refs/heads/}
-          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: checkout docugen repo
         uses: actions/checkout@v2
         with:
@@ -35,7 +29,7 @@ jobs:
       - name: generate documentation
         working-directory: ./documentation/docugen
         env:
-          VERSION: ${{ steps.release.VERSION }}
+          VERSION: ${{ github.event.release.tag_name }}
         # run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id $VERSION --output_dir ../gitbook
         run: python -c 'print("$VERSION")'
       - name: display ToC
@@ -43,7 +37,7 @@ jobs:
       - name: commit changes
         working-directory: ./documentation/gitbook
         env:
-          VERSION: ${{ steps.release.VERSION }}
+          VERSION: ${{ github.event.release.tag_name }}
         run: |
           echo "hello from inside the github action!" >> app.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -57,4 +51,4 @@ jobs:
         run: |
           git remote set-url origin https://charlesfrye:$PERSONAL_ACCESS_TOKEN@github.com/wandb/gitbook.git
           git remote get-url origin
-          git push --set-upstream origin en
+          # git push --set-upstream origin en
