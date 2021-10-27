@@ -1,11 +1,15 @@
 name: Generate Documentation
-on:
+
+on:  # whenever a release is published,
   release:
     types: [published]
-jobs:
+
+jobs:  # update the docs.
   update-docs:
     runs-on: ubuntu-latest
     steps:
+
+      # setup: checkout docugen tool and docs from github
       - name: checkout docugen repo
         uses: actions/checkout@v2
         with:
@@ -19,19 +23,25 @@ jobs:
           path: documentation/gitbook
           ref: en
           persist-credentials: false
+      # setup: bring in python plus the requirements for generating docs
       - name: setup python
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
       - name: setup python environment
         run: python -m pip install -r ./documentation/docugen/requirements.txt
+
+      # generate the docs from the latest client library and overwrite gitbook contents
       - name: generate documentation
         working-directory: ./documentation/docugen
         env:
           VERSION: ${{ github.event.release.tag_name }}
         run: python generate.py --template_file ../gitbook/SUMMARY.md --commit_id $VERSION --output_dir ../gitbook
+      # for debugging/tracking, display the generated table of contents
       - name: display ToC
         run: cat ./documentation/gitbook/SUMMARY.md
+
+      # stage: commit the changes
       - name: commit changes
         working-directory: ./documentation/gitbook
         env:
@@ -41,6 +51,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add -A .
           git commit -m "update reference docs to $VERSION"
+
+      # deploy: push to the gitbook repository, en branch
       - name: push
         working-directory: ./documentation/gitbook
         env:
