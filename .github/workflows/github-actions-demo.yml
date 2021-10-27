@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add .
+          git add -A .
           git commit -m "Update to v0.12.5"
       - name: push
         working-directory: ./documentation/gitbook
@@ -39,4 +39,4 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
         run: |
           git remote set-url origin https://charlesfrye:$PERSONAL_ACCESS_TOKEN@github.com/charlesfrye/gitbook.git
-          git push -set-upstream origin en
+          git push --set-upstream origin en
